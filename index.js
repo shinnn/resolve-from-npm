@@ -4,6 +4,8 @@
 */
 'use strict';
 
+var inspect = require('util').inspect;
+
 var npmCliDir = require('npm-cli-dir');
 var PinkiePromise = require('pinkie-promise');
 var resolveFrom = require('resolve-from');
@@ -12,7 +14,7 @@ module.exports = function resolveFromNpm(moduleId) {
   return npmCliDir().then(function(fromDir) {
     if (typeof moduleId !== 'string') {
       return PinkiePromise.reject(new TypeError(
-        String(moduleId) +
+        inspect(moduleId) +
         ' is not a string. Expected a module ID to resolve from npm directory (' +
         fromDir +
         ').'

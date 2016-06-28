@@ -1,18 +1,18 @@
-'use strict';
+'use strong';
 
-var path = require('path');
+const path = require('path');
 
-var escapeStringRegexp = require('escape-string-regexp');
-var resolveFromNpm = require('./');
-var test = require('tape');
+const escapeStringRegexp = require('escape-string-regexp');
+const resolveFromNpm = require('.');
+const test = require('tape');
 
-test('resolveFromNpm()', function(t) {
+test('resolveFromNpm()', t => {
   t.plan(8);
 
   t.strictEqual(resolveFromNpm.name, 'resolveFromNpm', 'should have a function name.');
 
-  resolveFromNpm('semver').then(function(semverPath) {
-    var semver = require(semverPath);
+  resolveFromNpm('semver').then(semverPath => {
+    const semver = require(semverPath);
 
     t.strictEqual(
       semver.compare('2.0.0-rc1', '1.99.2-beta'),
@@ -21,7 +21,7 @@ test('resolveFromNpm()', function(t) {
     );
   }).catch(t.fail);
 
-  resolveFromNpm('request/package.json').then(function(requestPackageJsonPath) {
+  resolveFromNpm('request/package.json').then(requestPackageJsonPath => {
     t.strictEqual(
       require(requestPackageJsonPath).name,
       'request',
@@ -29,7 +29,7 @@ test('resolveFromNpm()', function(t) {
     );
   }).catch(t.fail);
 
-  resolveFromNpm('./package.json').then(function(npmPackageJsonPath) {
+  resolveFromNpm('./package.json').then(npmPackageJsonPath => {
     t.strictEqual(
       require(npmPackageJsonPath).main,
       './lib/npm.js',
@@ -37,9 +37,9 @@ test('resolveFromNpm()', function(t) {
     );
   }).catch(t.fail);
 
-  resolveFromNpm('package.json').then(t.fail, function(err) {
-    var re = new RegExp(
-      'Cannot find module: "package\\.json" from npm directory \\(.*node_modules' +
+  resolveFromNpm('package.json').then(t.fail, err => {
+    const re = new RegExp(
+      'Cannot find module `package\\.json` from npm directory \\(.*node_modules' +
       escapeStringRegexp(path.sep) +
       'npm\\)\\.'
     );
@@ -53,7 +53,7 @@ test('resolveFromNpm()', function(t) {
     );
   }).catch(t.fail);
 
-  resolveFromNpm(1).then(t.fail, function(err) {
+  resolveFromNpm(1).then(t.fail, err => {
     t.strictEqual(
       err.name,
       'TypeError',
@@ -61,7 +61,7 @@ test('resolveFromNpm()', function(t) {
     );
   }).catch(t.fail);
 
-  resolveFromNpm().then(t.fail, function(err) {
+  resolveFromNpm().then(t.fail, err => {
     t.ok(
       / is not a string\. Expected a module ID to resolve from npm directory \(.*\)\./.test(err.message),
       'should be rejected with a type error when it takes no arguments.'

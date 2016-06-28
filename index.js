@@ -4,16 +4,15 @@
 */
 'use strict';
 
-var inspect = require('util').inspect;
+const inspect = require('util').inspect;
 
-var npmCliDir = require('npm-cli-dir');
-var PinkiePromise = require('pinkie-promise');
-var resolveFrom = require('resolve-from');
+const npmCliDir = require('npm-cli-dir');
+const resolveFrom = require('resolve-from');
 
 module.exports = function resolveFromNpm(moduleId) {
-  return npmCliDir().then(function(fromDir) {
+  return npmCliDir().then(fromDir => {
     if (typeof moduleId !== 'string') {
-      return PinkiePromise.reject(new TypeError(
+      return Promise.reject(new TypeError(
         inspect(moduleId) +
         ' is not a string. Expected a module ID to resolve from npm directory (' +
         fromDir +
@@ -21,21 +20,15 @@ module.exports = function resolveFromNpm(moduleId) {
       ));
     }
 
-    var result = resolveFrom(fromDir, moduleId);
+    const result = resolveFrom(fromDir, moduleId);
 
     if (result === null) {
-      var err = new Error(
-        'Cannot find module: "' +
-        moduleId +
-        '" from npm directory (' +
-        fromDir +
-        ').'
-      );
+      const err = new Error(`Cannot find module \`${moduleId}\` from npm directory (${fromDir}).`);
       err.code = 'MODULE_NOT_FOUND';
 
-      return PinkiePromise.reject(err);
+      return Promise.reject(err);
     }
 
-    return PinkiePromise.resolve(result);
+    return result;
   });
 };

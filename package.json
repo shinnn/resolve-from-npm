@@ -32,10 +32,10 @@
     "resolve-from": "^2.0.0"
   },
   "devDependencies": {
-    "@shinnn/eslint-config-node": "^2.0.0",
+    "@shinnn/eslint-config-node": "^3.0.0",
     "escape-string-regexp": "^1.0.5",
-    "eslint": "^2.4.0",
-    "istanbul": "^0.4.4",
-    "tape": "^4.6.0"
+    "eslint": "^3.8.1",
+    "istanbul": "^0.4.5",
+    "tape": "^4.6.2"
   }
 }

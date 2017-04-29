@@ -20,7 +20,7 @@ module.exports = function resolveFromNpm(moduleId) {
       ));
     }
 
-    const result = resolveFrom(fromDir, moduleId);
+    const result = resolveFrom.silent(fromDir, moduleId);
 
     if (result === null) {
       const err = new Error(`Cannot find module \`${moduleId}\` from npm directory (${fromDir}).`);

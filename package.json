@@ -5,7 +5,7 @@
   "repository": "shinnn/resolve-from-npm",
   "author": "Shinnosuke Watanabe (https://github.com/shinnn)",
   "scripts": {
-    "pretest": "eslint --fix --config @shinnn/node index.js test.js",
+    "pretest": "eslint --fix --format=codeframe index.js test.js",
     "test": "node --throw-deprecation --track-heap-objects test.js",
     "coverage": "node --throw-deprecation --track-heap-objects node_modules/.bin/istanbul cover test.js"
   },
@@ -29,13 +29,16 @@
   ],
   "dependencies": {
     "npm-cli-dir": "^2.0.0",
-    "resolve-from": "^2.0.0"
+    "resolve-from": "^3.0.0"
   },
   "devDependencies": {
     "@shinnn/eslint-config-node": "^3.0.0",
     "escape-string-regexp": "^1.0.5",
-    "eslint": "^3.8.1",
+    "eslint": "^3.19.0",
     "istanbul": "^0.4.5",
-    "tape": "^4.6.2"
+    "tape": "^4.6.3"
+  },
+  "eslintConfig": {
+    "extends": "@shinnn/node"
   }
 }

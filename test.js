@@ -1,13 +1,12 @@
 'use strict';
 
-const path = require('path');
-
-const escapeStringRegexp = require('escape-string-regexp');
+const npmCliDir = require('npm-cli-dir');
 const resolveFromNpm = require('.');
 const test = require('tape');
 
-test('resolveFromNpm()', t => {
+test('resolveFromNpm()', async t => {
   t.plan(8);
+  const dir = await npmCliDir();
 
   t.strictEqual(resolveFromNpm.name, 'resolveFromNpm', 'should have a function name.');
 
@@ -37,17 +36,15 @@ test('resolveFromNpm()', t => {
     );
   }).catch(t.fail);
 
-  resolveFromNpm('package.json').then(t.fail, err => {
-    const re = new RegExp(
-      'Cannot find module `package\\.json` from npm directory \\(.*node_modules' +
-      escapeStringRegexp(path.sep) +
-      'npm\\)\\.'
+  resolveFromNpm('package.json').then(t.fail, ({code, message}) => {
+    t.strictEqual(
+      message,
+      `Cannot find module \`package.json\` from npm directory (${dir}).`,
+      'should fail when it cannot resolve a path.'
     );
 
-    t.ok(re.test(err.message), 'should fail when it cannot resolve a path.');
-
     t.strictEqual(
-      err.code,
+      code,
       'MODULE_NOT_FOUND',
       'should add `code` property to the error when it cannot resolve a path.'
     );
@@ -61,9 +58,10 @@ test('resolveFromNpm()', t => {
     );
   }).catch(t.fail);
 
-  resolveFromNpm().then(t.fail, err => {
-    t.ok(
-      / is not a string\. Expected a module ID to resolve from npm directory \(.*\)\./.test(err.message),
+  resolveFromNpm().then(t.fail, ({message}) => {
+    t.strictEqual(
+      message,
+      `Expected a module ID to resolve from npm directory (${dir}), but got undefined.`,
       'should be rejected with a type error when it takes no arguments.'
     );
   }).catch(t.fail);

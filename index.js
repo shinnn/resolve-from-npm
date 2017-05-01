@@ -4,20 +4,16 @@
 */
 'use strict';
 
-const inspect = require('util').inspect;
-
+const inspectWithKind = require('inspect-with-kind');
 const npmCliDir = require('npm-cli-dir');
 const resolveFrom = require('resolve-from');
 
 module.exports = function resolveFromNpm(moduleId) {
   return npmCliDir().then(fromDir => {
     if (typeof moduleId !== 'string') {
-      return Promise.reject(new TypeError(
-        inspect(moduleId) +
-        ' is not a string. Expected a module ID to resolve from npm directory (' +
-        fromDir +
-        ').'
-      ));
+      return Promise.reject(new TypeError(`Expected a module ID to resolve from npm directory (${fromDir}), but got ${
+        inspectWithKind(moduleId)
+      }.`));
     }
 
     const result = resolveFrom.silent(fromDir, moduleId);

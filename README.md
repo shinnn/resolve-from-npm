@@ -4,8 +4,6 @@
 [![Build Status](https://travis-ci.org/shinnn/resolve-from-npm.svg?branch=master)](https://travis-ci.org/shinnn/resolve-from-npm)
 [![Build status](https://ci.appveyor.com/api/projects/status/63lufw43bx54l9wp/branch/master?svg=true)](https://ci.appveyor.com/project/ShinnosukeWatanabe/resolve-from-npm/branch/master)
 [![Coverage Status](https://img.shields.io/coveralls/shinnn/resolve-from-npm.svg)](https://coveralls.io/github/shinnn/resolve-from-npm)
-[![Dependency Status](https://david-dm.org/shinnn/resolve-from-npm.svg)](https://david-dm.org/shinnn/resolve-from-npm)
-[![devDependency Status](https://david-dm.org/shinnn/resolve-from-npm/dev-status.svg)](https://david-dm.org/shinnn/resolve-from-npm#info=devDependencies)
 
 Resolve the path of a module from the directory where [npm](https://www.npmjs.com/package/npm) is installed
 
@@ -38,11 +36,11 @@ const resolveFromNpm = require('resolve-from-npm');
 ### resolveFromNpm(*moduleId*)
 
 *moduleId*: `String` (a module ID)  
-Return: `Object` (a [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) instance)
+Return: `Promise<string>`
 
 It resolves the path of a module from the path where [npm-cli-dir](https://github.com/shinnn/npm-cli-dir) resolves.
 
-The returned promise will be [fulfilled](http://promisesaplus.com/#point-26) with a string of the resolved file path, or [rejected](http://promisesaplus.com/#point-30) when it fails to find the module.
+The promise will be [fulfilled](http://promisesaplus.com/#point-26) with a string of the resolved file path, or [rejected](http://promisesaplus.com/#point-30) when it fails to find the module.
 
 ```javascript
 resolveFromNpm('./lib/install').then(resolvedPath => {
@@ -56,6 +54,6 @@ resolveFromNpm('lib/install').catch(err => {
 
 ## License
 
-Copyright (c) 2015 - 2016 [Shinnosuke Watanabe](https://github.com/shinnn)
+Copyright (c) 2015 - 2017 [Shinnosuke Watanabe](https://github.com/shinnn)
 
 Licensed under [the MIT License](./LICENSE).

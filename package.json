@@ -1,6 +1,6 @@
 {
   "name": "resolve-from-npm",
-  "version": "2.0.3-0",
+  "version": "2.0.3",
   "description": "Resolve the path of a module from the directory where npm is installed",
   "repository": "shinnn/resolve-from-npm",
   "author": "Shinnosuke Watanabe (https://github.com/shinnn)",
@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@shinnn/eslint-config-node": "^4.0.2",
-    "eslint": "^4.11.0",
+    "eslint": "^4.12.0",
     "nyc": "^11.3.0",
     "tape": "^4.8.0"
   },

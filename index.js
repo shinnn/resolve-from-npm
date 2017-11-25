@@ -1,7 +1,3 @@
-/*!
- * resolve-from-npm | MIT (c) Shinnosuke Watanabe
- * https://github.com/shinnn/resolve-from-npm
-*/
 'use strict';
 
 const inspectWithKind = require('inspect-with-kind');

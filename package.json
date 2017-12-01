@@ -35,6 +35,7 @@
     "@shinnn/eslint-config-node": "^4.0.2",
     "eslint": "^4.12.0",
     "nyc": "^11.3.0",
+    "rmfr": "^1.0.3",
     "tape": "^4.8.0"
   },
   "eslintConfig": {

@@ -9,13 +9,19 @@ const resolveFromNpm = require('.');
 const rmfr = require('rmfr');
 const test = require('tape');
 
+const promisifiedSymlink = promisify(symlink);
+
 test('resolveFromNpm()', async t => {
-	t.plan(8);
+	t.plan(9);
 
 	const symlinkPath = join(__dirname, 'tmp.js');
+	const brokenSymlinkPath = join(__dirname, 'tmp-broken.js');
 
-	await rmfr(symlinkPath);
-	await promisify(symlink)(__filename, symlinkPath);
+	await rmfr(`{${symlinkPath},${brokenSymlinkPath}}`, {glob: true});
+	await Promise.all([
+		promisifiedSymlink(__filename, symlinkPath),
+		promisifiedSymlink('this__file__does__not__exist', brokenSymlinkPath)
+	]);
 
 	const dir = await npmCliDir();
 
@@ -64,6 +70,14 @@ test('resolveFromNpm()', async t => {
 			code,
 			'MODULE_NOT_FOUND',
 			'should add `code` property to the error when it cannot resolve a path.'
+		);
+	}).catch(t.fail);
+
+	resolveFromNpm(brokenSymlinkPath).then(t.fail, ({message}) => {
+		t.equal(
+			message,
+			`Cannot find module \`${brokenSymlinkPath}\` from npm directory (${dir}).`,
+			'should fail when it can find a symlink but cannot resolve a path from it.'
 		);
 	}).catch(t.fail);
 

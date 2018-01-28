@@ -62,7 +62,7 @@ test('resolveFromNpm()', async t => {
 	resolveFromNpm('package.json').then(t.fail, ({code, message}) => {
 		t.equal(
 			message,
-			`Cannot find module \`package.json\` from npm directory (${dir}).`,
+			`Cannot find module 'package.json' from the npm directory '${dir}'.`,
 			'should fail when it cannot resolve a path.'
 		);
 
@@ -76,7 +76,7 @@ test('resolveFromNpm()', async t => {
 	resolveFromNpm(brokenSymlinkPath).then(t.fail, ({message}) => {
 		t.equal(
 			message,
-			`Cannot find module \`${brokenSymlinkPath}\` from npm directory (${dir}).`,
+			`Cannot find module '${brokenSymlinkPath}'`,
 			'should fail when it can find a symlink but cannot resolve a path from it.'
 		);
 	}).catch(t.fail);

@@ -1,8 +1,22 @@
 'use strict';
 
+const pathLib = require('path');
+
+const isAbsolute = pathLib.isAbsolute;
+const join = pathLib.join;
+
 const inspectWithKind = require('inspect-with-kind');
 const npmCliDir = require('npm-cli-dir');
-const resolveFrom = require('resolve-from');
+
+const resolveFrom = typeof require.resolve.paths === 'function' ? function resolveFrom(fromDir, moduleId) {
+	if (moduleId.startsWith('.')) {
+		return require.resolve(join(fromDir, moduleId));
+	}
+
+	return require.resolve(moduleId, {
+		paths: [join(fromDir, 'node_modules')]
+	});
+} : require('resolve-from');
 
 module.exports = function resolveFromNpm(moduleId) {
 	return npmCliDir().then(fromDir => {
@@ -12,15 +26,16 @@ module.exports = function resolveFromNpm(moduleId) {
 			}.`));
 		}
 
-		const result = resolveFrom.silent(fromDir, moduleId);
-
-		if (result === null) {
-			const err = new Error(`Cannot find module \`${moduleId}\` from npm directory (${fromDir}).`);
-			err.code = 'MODULE_NOT_FOUND';
-
-			return Promise.reject(err);
+		// Should drop absolute path support in the future
+		if (isAbsolute(moduleId)) {
+			return require.resolve(moduleId);
 		}
 
-		return result;
+		try {
+			return resolveFrom(fromDir, moduleId);
+		} catch (err) {
+			err.message = `Cannot find module '${moduleId}' from the npm directory '${fromDir}'.`;
+			throw err;
+		}
 	});
 };

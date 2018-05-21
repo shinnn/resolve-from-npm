@@ -56,4 +56,4 @@ It resolves the path of a module from the path where [npm-cli-dir](https://githu
 
 ## License
 
-[ISC License](./LICENSE) © 2017 Shinnosuke Watanabe
+[ISC License](./LICENSE) © 2017 - 2018 Shinnosuke Watanabe

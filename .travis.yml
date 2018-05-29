@@ -3,5 +3,4 @@ branches:
 language: node_js
 node_js:
   - node
-  - '8.8.1'
 after_script: node_modules/.bin/nyc report --reporter=text-lcov | npx coveralls

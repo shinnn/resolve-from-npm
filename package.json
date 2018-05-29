@@ -28,8 +28,7 @@
 	],
 	"dependencies": {
 		"inspect-with-kind": "^1.0.4",
-		"npm-cli-dir": "^2.0.2",
-		"resolve-from": "^4.0.0"
+		"npm-cli-dir": "^2.0.2"
 	},
 	"devDependencies": {
 		"@shinnn/eslint-config-node": "^5.0.0",

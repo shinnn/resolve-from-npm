@@ -5,14 +5,6 @@ const {isAbsolute, join} = require('path');
 const inspectWithKind = require('inspect-with-kind');
 const npmCliDir = require('npm-cli-dir');
 
-const resolveFrom = typeof require.resolve.paths === 'function' ? function resolveFrom(fromDir, moduleId) {
-	if (moduleId.startsWith('.')) {
-		return require.resolve(join(fromDir, moduleId));
-	}
-
-	return require.resolve(moduleId, {paths: [join(fromDir, 'node_modules')]});
-} : require('resolve-from');
-
 module.exports = async function resolveFromNpm(moduleId) {
 	const fromDir = await npmCliDir();
 
@@ -28,7 +20,11 @@ module.exports = async function resolveFromNpm(moduleId) {
 	}
 
 	try {
-		return resolveFrom(fromDir, moduleId);
+		if (moduleId.startsWith('.')) {
+			return require.resolve(join(fromDir, moduleId));
+		}
+
+		return require.resolve(moduleId, {paths: [join(fromDir, 'node_modules')]});
 	} catch (err) {
 		err.message = `Cannot find module '${moduleId}' from the npm directory '${fromDir}'.`;
 		throw err;

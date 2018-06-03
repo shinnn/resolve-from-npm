@@ -1,65 +1,38 @@
 'use strict';
 
-const {join} = require('path');
-const {promisify} = require('util');
-const {symlink} = require('fs');
+const {inspect} = require('util');
 
 const npmCliDir = require('npm-cli-dir');
 const resolveFromNpm = require('.');
-const rmfr = require('rmfr');
 const test = require('tape');
 
-const promisifiedSymlink = promisify(symlink);
-
 test('resolveFromNpm()', async t => {
-	t.plan(9);
-
-	const symlinkPath = join(__dirname, 'tmp.js');
-	const brokenSymlinkPath = join(__dirname, 'tmp-broken.js');
-
-	await rmfr(`{${symlinkPath},${brokenSymlinkPath}}`, {glob: true});
-	await Promise.all([
-		promisifiedSymlink(__filename, symlinkPath),
-		promisifiedSymlink('this__file__does__not__exist', brokenSymlinkPath)
-	]);
+	t.plan(8);
 
 	const dir = await npmCliDir();
 
-	resolveFromNpm('semver').then(semverPath => {
-		const semver = require(semverPath);
+	const semver = require(await resolveFromNpm('semver'));
+	t.equal(
+		semver.compare('2.0.0-rc1', '1.99.2-beta'),
+		1,
+		'should resolve the path of a module entry point.'
+	);
 
-		t.equal(
-			semver.compare('2.0.0-rc1', '1.99.2-beta'),
-			1,
-			'should resolve the path of a module entry point.'
-		);
-	}).catch(t.fail);
+	t.equal(
+		require(await resolveFromNpm('request/package.json')).name,
+		'request',
+		'should resolve the path inside a module.'
+	);
 
-	resolveFromNpm('request/package.json').then(requestPackageJsonPath => {
-		t.equal(
-			require(requestPackageJsonPath).name,
-			'request',
-			'should resolve the path inside a module.'
-		);
-	}).catch(t.fail);
+	t.equal(
+		require(await resolveFromNpm('./package.json')).main,
+		'./lib/npm.js',
+		'should resolve the path from a relative path.'
+	);
 
-	resolveFromNpm('./package.json').then(npmPackageJsonPath => {
-		t.equal(
-			require(npmPackageJsonPath).main,
-			'./lib/npm.js',
-			'should resolve the path from a relative path.'
-		);
-	}).catch(t.fail);
-
-	resolveFromNpm(symlinkPath).then(resolvedSymlinkPath => {
-		t.equal(
-			resolvedSymlinkPath,
-			__filename,
-			'should resolve symbolic links.'
-		);
-	}).catch(t.fail);
-
-	resolveFromNpm('package.json').then(t.fail, ({code, message}) => {
+	try {
+		await resolveFromNpm('package.json');
+	} catch ({code, message}) {
 		t.equal(
 			message,
 			`Cannot find module 'package.json' from the npm directory '${dir}'.`,
@@ -71,29 +44,34 @@ test('resolveFromNpm()', async t => {
 			'MODULE_NOT_FOUND',
 			'should add `code` property to the error when it cannot resolve a path.'
 		);
-	}).catch(t.fail);
+	}
 
-	resolveFromNpm(brokenSymlinkPath).then(t.fail, ({message}) => {
-		t.equal(
-			message,
-			`Cannot find module '${brokenSymlinkPath}'`,
-			'should fail when it can find a symlink but cannot resolve a path from it.'
+	try {
+		await resolveFromNpm(__filename);
+	} catch ({message}) {
+		t.ok(
+			message.includes(`got an absolute path ${inspect(__filename)}`),
+			'should be rejected with a type error when it takes an absolute path.'
 		);
-	}).catch(t.fail);
+	}
 
-	resolveFromNpm(1).then(t.fail, err => {
+	try {
+		await resolveFromNpm(1);
+	} catch ({name}) {
 		t.equal(
-			err.name,
+			name,
 			'TypeError',
 			'should be rejected with a type error when it takes a non-string argument.'
 		);
-	}).catch(t.fail);
+	}
 
-	resolveFromNpm().then(t.fail, ({message}) => {
+	try {
+		await resolveFromNpm();
+	} catch ({message}) {
 		t.equal(
 			message,
 			`Expected a module ID to resolve from npm directory (${dir}), but got undefined.`,
 			'should be rejected with a type error when it takes no arguments.'
 		);
-	}).catch(t.fail);
+	}
 });

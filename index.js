@@ -16,9 +16,13 @@ module.exports = async function resolveFromNpm(moduleId) {
 	}
 
 	if (isAbsolute(moduleId)) {
-		throw new Error(`Expected a module ID to resolve from npm directory (${fromDir}), but got an absolute path ${
+		const error = new Error(`Expected a module ID to resolve from npm directory (${fromDir}), but got an absolute path ${
 			inspect(moduleId)
 		}. For absolute paths there is no need to use \`resolve-from-npm\` in favor of Node.js built-in \`require.resolve()\`.`);
+
+		error.code = 'ERR_ABSOLUTE_MODULE_ID';
+
+		throw error;
 	}
 
 	try {

@@ -7,7 +7,7 @@ const resolveFromNpm = require('.');
 const test = require('tape');
 
 test('resolveFromNpm()', async t => {
-	t.plan(8);
+	t.plan(9);
 
 	const dir = await npmCliDir();
 
@@ -48,10 +48,16 @@ test('resolveFromNpm()', async t => {
 
 	try {
 		await resolveFromNpm(__filename);
-	} catch ({message}) {
+	} catch ({code, message}) {
 		t.ok(
 			message.includes(`got an absolute path ${inspect(__filename)}`),
 			'should be rejected with a type error when it takes an absolute path.'
+		);
+
+		t.equal(
+			code,
+			'ERR_ABSOLUTE_MODULE_ID',
+			'should set error code when it takes an absolute path.'
 		);
 	}
 

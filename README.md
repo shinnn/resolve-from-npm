@@ -2,7 +2,6 @@
 
 [![npm version](https://img.shields.io/npm/v/resolve-from-npm.svg)](https://www.npmjs.com/package/resolve-from-npm)
 [![Build Status](https://travis-ci.org/shinnn/resolve-from-npm.svg?branch=master)](https://travis-ci.org/shinnn/resolve-from-npm)
-[![Build status](https://ci.appveyor.com/api/projects/status/63lufw43bx54l9wp/branch/master?svg=true)](https://ci.appveyor.com/project/ShinnosukeWatanabe/resolve-from-npm/branch/master)
 [![Coverage Status](https://img.shields.io/coveralls/shinnn/resolve-from-npm.svg)](https://coveralls.io/github/shinnn/resolve-from-npm)
 
 Resolve the path of a module from the directory where [npm](https://www.npmjs.com/package/npm) is installed

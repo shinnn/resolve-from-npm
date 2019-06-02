@@ -3,11 +3,11 @@
 	"version": "3.1.0",
 	"description": "Resolve the path of a module from the directory where npm is installed",
 	"repository": "shinnn/resolve-from-npm",
-	"author": "Shinnosuke Watanabe (https://github.com/shinnn)",
+	"author": "Watanabe Shinnosuke (https://github.com/shinnn)",
 	"license": "ISC",
 	"scripts": {
 		"pretest": "eslint .",
-		"test": "nyc node test.js"
+		"test": "coverage test.js"
 	},
 	"files": [
 		"index.js"
@@ -28,20 +28,15 @@
 	],
 	"dependencies": {
 		"inspect-with-kind": "^1.0.5",
-		"npm-cli-dir": "^3.0.1"
+		"npm-cli-dir": "^4.0.0"
 	},
 	"devDependencies": {
-		"@shinnn/eslint-config": "^6.7.5",
-		"eslint": "^5.7.0",
-		"nyc": "^13.1.0",
-		"nyc-config-common": "^1.0.1",
-		"rmfr": "^2.0.0",
-		"tape": "^4.9.1"
+		"@shinnn/eslint-config": "^6.10.4",
+		"coverage": "^0.3.3",
+		"eslint": "^5.16.0",
+		"tape": "^4.10.2"
 	},
 	"eslintConfig": {
 		"extends": "@shinnn"
-	},
-	"nyc": {
-		"extends": "nyc-config-common"
 	}
 }

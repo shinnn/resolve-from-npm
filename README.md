@@ -1,8 +1,8 @@
 # resolve-from-npm
 
 [![npm version](https://img.shields.io/npm/v/resolve-from-npm.svg)](https://www.npmjs.com/package/resolve-from-npm)
-[![Build Status](https://travis-ci.org/shinnn/resolve-from-npm.svg?branch=master)](https://travis-ci.org/shinnn/resolve-from-npm)
-[![Coverage Status](https://img.shields.io/coveralls/shinnn/resolve-from-npm.svg)](https://coveralls.io/github/shinnn/resolve-from-npm)
+[![Build Status](https://travis-ci.com/shinnn/resolve-from-npm.svg?branch=master)](https://travis-ci.com/shinnn/resolve-from-npm)
+[![codecov](https://codecov.io/gh/shinnn/resolve-from-npm/branch/master/graph/badge.svg)](https://codecov.io/gh/shinnn/resolve-from-npm)
 
 Resolve the path of a module from the directory where [npm](https://www.npmjs.com/package/npm) is installed
 
@@ -20,7 +20,7 @@ const resolveFromNpm = require('resolve-from-npm');
 
 ## Installation
 
-[Use](https://docs.npmjs.com/cli/install) [npm](https://docs.npmjs.com/getting-started/what-is-npm).
+[Use](https://docs.npmjs.com/cli/install) [npm](https://docs.npmjs.com/about-npm/).
 
 ```
 npm install resolve-from-npm
@@ -55,4 +55,4 @@ It resolves the path of a module from the path where [npm-cli-dir](https://githu
 
 ## License
 
-[ISC License](./LICENSE) © 2017 - 2018 Shinnosuke Watanabe
+[ISC License](./LICENSE) © 2017 - 2019 Watanabe Shinnosuke

@@ -10,9 +10,12 @@ module.exports = async function resolveFromNpm(moduleId) {
 	const fromDir = await npmCliDir();
 
 	if (typeof moduleId !== 'string') {
-		throw new TypeError(`Expected a module ID to resolve from npm directory (${fromDir}), but got ${
+		const error = new TypeError(`Expected a module ID to resolve from npm directory (${fromDir}), but got ${
 			inspectWithKind(moduleId)
 		}.`);
+
+		error.code = 'ERR_INVALID_ARG_TYPE';
+		throw error;
 	}
 
 	if (isAbsolute(moduleId)) {
@@ -21,7 +24,6 @@ module.exports = async function resolveFromNpm(moduleId) {
 		}. For absolute paths there is no need to use \`resolve-from-npm\` in favor of Node.js built-in \`require.resolve()\`.`);
 
 		error.code = 'ERR_ABSOLUTE_MODULE_ID';
-
 		throw error;
 	}
 

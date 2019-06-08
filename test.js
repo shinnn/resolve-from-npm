@@ -7,7 +7,7 @@ const resolveFromNpm = require('.');
 const test = require('tape');
 
 test('resolveFromNpm()', async t => {
-	t.plan(9);
+	t.plan(10);
 
 	const dir = await npmCliDir();
 
@@ -32,7 +32,7 @@ test('resolveFromNpm()', async t => {
 
 	try {
 		await resolveFromNpm('package.json');
-	} catch ({code, message}) {
+	} catch ({code, message, npmDir}) {
 		t.equal(
 			message,
 			`Cannot find module 'package.json' from the npm directory '${dir}'.`,
@@ -43,6 +43,12 @@ test('resolveFromNpm()', async t => {
 			code,
 			'MODULE_NOT_FOUND',
 			'should add `code` property to the error when it cannot resolve a path.'
+		);
+
+		t.equal(
+			npmDir,
+			dir,
+			'should add `npmDir` property to the error when it cannot resolve a path.'
 		);
 	}
 

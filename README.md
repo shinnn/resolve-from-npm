@@ -4,17 +4,17 @@
 [![Build Status](https://travis-ci.com/shinnn/resolve-from-npm.svg?branch=master)](https://travis-ci.com/shinnn/resolve-from-npm)
 [![codecov](https://codecov.io/gh/shinnn/resolve-from-npm/branch/master/graph/badge.svg)](https://codecov.io/gh/shinnn/resolve-from-npm)
 
-Resolve the path of a module from the directory where [npm](https://www.npmjs.com/package/npm) is installed
+Resolve the path of a module from the directory where [npm CLI](https://github.com/npm/cli) is installed
 
 ```javascript
 const resolveFromNpm = require('resolve-from-npm');
 
-(async () => {
-  require.resolve('npm-registry-client');
-  //=> '/path/to/the/current/directory/node_modules/npm-registry-client/index.js'
+require.resolve('node-fetch-npm');
+//=> '/path/to/the/current/directory/node_modules/node-fetch-npm/src/index.js'
 
-  await resolveFromNpm('npm-registry-client');
-  //=> '/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/index.js'
+(async () => {
+  await resolveFromNpm('node-fetch-npm');
+  //=> '/usr/local/lib/node_modules/npm/node_modules/node-fetch-npm/src/index.js'
 })();
 ```
 
@@ -41,14 +41,17 @@ It resolves the path of a module from the path where [npm-cli-dir](https://githu
 
 ```javascript
 (async () => {
-  await resolveFromNpm('./lib/install');
-  //=> '/usr/local/lib/node_modules/npm/lib/install.js'
+  await resolveFromNpm('./lib/install'); //=> '/usr/local/lib/node_modules/npm/lib/install.js'
+})();
 
+(async () => {
   try {
-    await resolveFromNpm('./foo/bar');
+    // npm CLI doesn't contain a file './hi'
+    await resolveFromNpm('./hi');
   } catch (err) {
-    err.message;
-    //=> 'Cannot find module: "./foo/bar" from npm directory (/usr/local/lib/node_modules/npm).'
+    err.code; //=> 'MODULE_NOT_FOUND'
+    err.message; //=> "Cannot find module './hi' from npm directory '/usr/local/lib/node_modules/npm'."
+    err.npmDir; //=> '/usr/local/lib/node_modules/npm'
   }
 })();
 ```

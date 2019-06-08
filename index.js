@@ -6,6 +6,8 @@ const {isAbsolute, join} = require('path');
 const inspectWithKind = require('inspect-with-kind');
 const npmCliDir = require('npm-cli-dir');
 
+const inspectOption = {breakLength: Infinity};
+
 module.exports = async function resolveFromNpm(moduleId) {
 	const fromDir = await npmCliDir();
 
@@ -20,7 +22,7 @@ module.exports = async function resolveFromNpm(moduleId) {
 
 	if (isAbsolute(moduleId)) {
 		const error = new Error(`Expected a module ID to resolve from npm directory (${fromDir}), but got an absolute path ${
-			inspect(moduleId)
+			inspect(moduleId, inspectOption)
 		}. For absolute paths there is no need to use \`resolve-from-npm\` in favor of Node.js built-in \`require.resolve()\`.`);
 
 		error.code = 'ERR_ABSOLUTE_MODULE_ID';
@@ -34,7 +36,12 @@ module.exports = async function resolveFromNpm(moduleId) {
 
 		return require.resolve(moduleId, {paths: [join(fromDir, 'node_modules')]});
 	} catch (err) {
-		err.message = `Cannot find module '${moduleId}' from the npm directory '${fromDir}'.`;
+		err.message = `Cannot find module ${
+			inspect(moduleId, inspectOption)
+		} from the npm directory ${
+			inspect(fromDir, inspectOption)
+		}.`;
+		err.npmDir = fromDir;
 		throw err;
 	}
 };

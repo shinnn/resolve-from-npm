@@ -7,7 +7,7 @@ const resolveFromNpm = require('.');
 const test = require('tape');
 
 test('resolveFromNpm()', async t => {
-	t.plan(10);
+	t.plan(11);
 
 	const dir = await npmCliDir();
 
@@ -57,7 +57,7 @@ test('resolveFromNpm()', async t => {
 	} catch ({code, message}) {
 		t.ok(
 			message.includes(`got an absolute path ${inspect(__filename)}`),
-			'should be rejected with a type error when it takes an absolute path.'
+			'should fail when it takes an absolute path.'
 		);
 
 		t.equal(
@@ -68,12 +68,22 @@ test('resolveFromNpm()', async t => {
 	}
 
 	try {
+		await resolveFromNpm('');
+	} catch ({code}) {
+		t.equal(
+			code,
+			'ERR_INVALID_ARG_VALUE',
+			'should fail when it takes an empty string.'
+		);
+	}
+
+	try {
 		await resolveFromNpm(1);
 	} catch ({name}) {
 		t.equal(
 			name,
 			'TypeError',
-			'should be rejected with a type error when it takes a non-string argument.'
+			'should fail when it takes a non-string argument.'
 		);
 	}
 
@@ -83,7 +93,7 @@ test('resolveFromNpm()', async t => {
 		t.equal(
 			message,
 			`Expected a module ID to resolve from npm directory (${dir}), but got undefined.`,
-			'should be rejected with a type error when it takes no arguments.'
+			'should fail when it takes no arguments.'
 		);
 	}
 });

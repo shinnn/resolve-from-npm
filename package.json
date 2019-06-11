@@ -1,6 +1,6 @@
 {
 	"name": "resolve-from-npm",
-	"version": "4.1.0",
+	"version": "4.2.0",
 	"description": "Resolve the path of a module from the directory where npm is installed",
 	"repository": "shinnn/resolve-from-npm",
 	"author": "Watanabe Shinnosuke (https://github.com/shinnn)",
